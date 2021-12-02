@@ -34,30 +34,30 @@ int part1(char* filename){
 int part2(char* filename){
     FILE* f = fopen(filename, "r");
     char buff[6];
-    vect* values = (vect*)malloc(sizeof(vect)*2000);
-    int count = 1;
+    vect last_vec;
     int result = 0;
 
     fgets(buff, sizeof(buff), f);
-    values[0].x = atoi(buff);
+    last_vec.x = atoi(buff);
     fgets(buff, sizeof(buff), f);
-    values[0].y = atoi(buff);
+    last_vec.y = atoi(buff);
     fgets(buff, sizeof(buff), f);
-    values[0].z = atoi(buff);
+    last_vec.z = atoi(buff);
 
     while(fgets(buff, sizeof(buff), f)){
-            values[count].x = values[count-1].y;
-            values[count].y = values[count-1].z;
-            values[count].z = atoi(buff);
-            if(vect_sum(values[count])  > vect_sum(values[count-1])){
-                result++;
-            }
-            count++;
+        vect curr_vec;
+        curr_vec.x = last_vec.y;
+        curr_vec.y = last_vec.z;
+        curr_vec.z = atoi(buff);
+        if(vect_sum(curr_vec)  > vect_sum(last_vec)){
+            result++;
+        }
+       last_vec = curr_vec;
 
     }
     fclose(f);
     
-    free(values);
+    
     return result;
 }
 
