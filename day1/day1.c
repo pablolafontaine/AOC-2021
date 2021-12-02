@@ -12,6 +12,14 @@ int vect_sum(vect v){
     return v.x + v.y + v.z;
 }
 
+vect vect_push(vect v, int item){
+    vect temp;
+    temp.x = v.y;
+    temp.y = v.z;
+    temp.z = item;
+    return temp;
+}
+
 int part1(char* filename){
     FILE* f = fopen(filename, "r");
     int result = 0;
@@ -21,9 +29,7 @@ int part1(char* filename){
 
     while(fgets(buff, sizeof(buff), f)){
         int curr = atoi(buff);
-        if(curr > last_val){
-            result++;
-        }
+        result += (curr > last_val);
         last_val = curr;
     }
     fclose(f);
@@ -35,22 +41,14 @@ int part2(char* filename){
     FILE* f = fopen(filename, "r");
     char buff[6];
     vect last_vec;
+    int i = 0;
     int result = 0;
 
-    fgets(buff, sizeof(buff), f);
-    last_vec.x = atoi(buff);
-    fgets(buff, sizeof(buff), f);
-    last_vec.y = atoi(buff);
-    fgets(buff, sizeof(buff), f);
-    last_vec.z = atoi(buff);
-
     while(fgets(buff, sizeof(buff), f)){
-        vect curr_vec;
-        curr_vec.x = last_vec.y;
-        curr_vec.y = last_vec.z;
-        curr_vec.z = atoi(buff);
-        if(vect_sum(curr_vec)  > vect_sum(last_vec)){
-            result++;
+        i++;
+        vect curr_vec = vect_push(last_vec, atoi(buff));
+        if(i > 3){
+            result += (vect_sum(curr_vec)  > vect_sum(last_vec));
         }
        last_vec = curr_vec;
 
